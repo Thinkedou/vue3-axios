@@ -11,10 +11,15 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/characters',
-      name: 'charList',
+      path: '/cards',
+      name: 'cardsList',
       component: MoviesList
-    }  
+    },
+    {
+      path: '/cards/:id',
+      name: 'cardsDetails',
+      component: MovieDetails
+    } 
   ]
 })
 

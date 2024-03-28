@@ -1,11 +1,26 @@
 <script setup>
+import {ref} from 'vue'
+
+const localCards = ref([])
+
+async function callApi() {
+    const url = "https://api.magicthegathering.io/v1/cards"
+    const fetcher = await fetch(url)
+    const json = await fetcher.json()
+    localCards.value = json.cards
+}
+callApi()
 
 </script>
 
 <template>
-  <div class="container">
+    <h2>{{ localCards.length }}</h2>
+    <div v-if="!localCards.length">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"><path fill="currentColor" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25"/><circle cx="12" cy="2.5" r="1.5" fill="currentColor"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></circle></svg>
+    </div>
+  <div v-else class="container">
+        
         <table class="styled-table">
-
             <thead>
                 <tr>
                     <th>Id</th>
@@ -14,15 +29,13 @@
                 </tr>
             </thead> 
             <tbody>
-                <tr >
-                    <td>ID</td>
-                    <td>Name</td>
-                    <td ><a href=''>👀</a></td>
+                <tr v-for="card in localCards" :key="card.id">
+                    <td>{{card.id}}</td>
+                    <td>{{card.name}}</td>
+                    <td ><router-link :to="'/cards/'+card.id">👀</router-link></td>
                 </tr>
             </tbody>
-        </table>
-
-        
+        </table>      
     </div>
 </template>
 
