@@ -1,17 +1,4 @@
 <script setup>
-import {ref} from 'vue'
-import {useRoute} from 'vue-router'
-const route = useRoute()
-
-const thisCard = ref({})
-
-async function callApi(cardId) {
-    const url = "https://api.magicthegathering.io/v1/cards/"+cardId
-    const fetcher = await fetch(url)
-    const json = await fetcher.json()
-	thisCard.value = json.card
-}
-callApi(route.params.id)
 
 
 </script>
@@ -21,11 +8,11 @@ callApi(route.params.id)
         <div class="film-container">
             <div class="film">
                 <div class="film-preview" >
-                    <img :src='thisCard.imageUrl' alt='char' />
+                    <img src='https://static.wikia.nocookie.net/disney/images/5/51/Giffany.png' alt='char' />
                 </div>
                 <div class="film-info">
-                    <h2>{{thisCard.name}}</h2>
-                    <span>{{thisCard.originalText}}</span>
+                    <h2>Char name</h2>
+                    <span>Liste Films</span>
                 </div>
             </div>
         </div>

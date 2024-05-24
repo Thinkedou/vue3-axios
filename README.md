@@ -1,8 +1,9 @@
 # vue3-disney-axios
 Comment solliciter une api 
+
 L'api ghibli étant désormais down, on passe finalement sur une api disney
 
-## Lien vers l'api MyAnimeList
+## Lien vers l'api Disney
 
 [Doc API DISNEY](https://disneyapi.dev/docs/)  
 
