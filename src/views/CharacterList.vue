@@ -1,13 +1,19 @@
 <script setup>
 import { onBeforeMount,ref, watch } from 'vue';
+import { storeToRefs } from 'pinia';
 import {useRouter,useRoute} from 'vue-router'
+import { useCharacterStore } from '../stores/characters';
 import ky from 'ky';
+
+const characterStore = useCharacterStore()
+const {disneyCharacters} = storeToRefs(characterStore)
+
 
 const router = useRouter() // router pour changer la route
 const route  = useRoute() // route pour lire la route et ses params
 
-const localCharacters = ref([])
-const isLoading       = ref(true)
+
+const isLoading       = ref(false)
 const nbCharacters    = ref(0)
 const page            = ref(1)
 
@@ -18,7 +24,7 @@ const fetchCharacters = async ()=> {
     // const datas   = await reponse.json()
     const {data,info} = jsonReq
     nbCharacters.value= info.totalPages*info.count
-    localCharacters.value = data
+    
     isLoading.value = false
 
 }
@@ -61,9 +67,11 @@ const initPage = ()=>{
 }
 
 onBeforeMount(async()=>{
-    console.log('ON BEFORE MOUNT',)
+    console.log('ON BEFORE MOUNT')
     initPage()
-    await fetchCharacters()
+    const fetchAll = await characterStore.fetchAllChar() // methode pinia!
+    console.log(fetchAll)
+    // await fetchCharacters()
 })
 
 </script>
@@ -93,7 +101,7 @@ onBeforeMount(async()=>{
             </thead> 
             <tbody>
                 <tr 
-                    v-for="char in localCharacters"
+                    v-for="char in disneyCharacters"
                     :key="char._id"
                 >
                     <td>{{char._id}}</td>
