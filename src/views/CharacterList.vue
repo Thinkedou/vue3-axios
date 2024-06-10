@@ -1,6 +1,7 @@
 <script setup>
 import { onBeforeMount,ref, watch } from 'vue';
 import {useRouter,useRoute} from 'vue-router'
+import ky from 'ky';
 
 const router = useRouter() // router pour changer la route
 const route  = useRoute() // route pour lire la route et ses params
@@ -11,13 +12,14 @@ const nbCharacters    = ref(0)
 const page            = ref(1)
 
 const fetchCharacters = async ()=> {
-  
-  const reponse = await fetch("https://api.disneyapi.dev/character/?page="+page.value)
-  const datas   = await reponse.json()
-  const {data,info} = datas
-  nbCharacters.value= info.totalPages*info.count
-  localCharacters.value = data
-  isLoading.value = false
+    const rawReq  = await ky.get("https://api.disneyapi.dev/character/?page="+page.value)
+    const jsonReq = await rawReq.json()
+    // const reponse = await fetch("https://api.disneyapi.dev/character/?page="+page.value)
+    // const datas   = await reponse.json()
+    const {data,info} = jsonReq
+    nbCharacters.value= info.totalPages*info.count
+    localCharacters.value = data
+    isLoading.value = false
 
 }
 
