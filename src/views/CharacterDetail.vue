@@ -1,4 +1,24 @@
 <script setup>
+import {ref, onBeforeMount} from 'vue'
+import { useRoute } from 'vue-router';
+const route = useRoute()
+
+const currentChar = ref({})
+const charId = route.params.charId
+
+const fetchOneChar = async () => {
+  const charEndPoint = `https://api.disneyapi.dev/character/${charId}`
+  const reponse = await fetch(charEndPoint);
+  const datas   = await reponse.json();
+  const {data,info} = datas
+  currentChar.value = data
+}
+
+onBeforeMount(async()=>{
+    await fetchOneChar()
+})
+
+
 
 
 </script>
@@ -8,11 +28,13 @@
         <div class="film-container">
             <div class="film">
                 <div class="film-preview" >
-                    <img src='https://static.wikia.nocookie.net/disney/images/5/51/Giffany.png' alt='char' />
+                    <img :src='currentChar.imageUrl' alt='char' />
                 </div>
                 <div class="film-info">
-                    <h2>Char name</h2>
-                    <span>Liste Films</span>
+                    <h2>{{currentChar.name}}</h2>
+					<ul>
+						<li v-for="film in currentChar.films" >{{film}}</li>
+					</ul>
                 </div>
             </div>
         </div>
