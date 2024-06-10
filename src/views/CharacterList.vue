@@ -7,6 +7,7 @@ import ky from 'ky';
 
 const characterStore = useCharacterStore()
 const {disneyCharacters} = storeToRefs(characterStore)
+const {fetchAllChar,setCurrentChar} = characterStore
 
 
 const router = useRouter() // router pour changer la route
@@ -36,6 +37,7 @@ watch(route, async (newValue, oldValue) => {
 })
 
 const goToDetail = (charId)=>{
+    setCurrentChar(charId)
     router.push({
         name:'chara-details',
         params:{
@@ -69,7 +71,7 @@ const initPage = ()=>{
 onBeforeMount(async()=>{
     console.log('ON BEFORE MOUNT')
     initPage()
-    const fetchAll = await characterStore.fetchAllChar() // methode pinia!
+    const fetchAll = await fetchAllChar() // methode pinia!
     console.log(fetchAll)
     // await fetchCharacters()
 })

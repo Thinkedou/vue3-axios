@@ -1,9 +1,13 @@
 <script setup>
 import {ref, onBeforeMount} from 'vue'
+import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
+import { useCharacterStore } from '../stores/characters';
 const route = useRoute()
 
-const currentChar = ref({})
+const characterStore = useCharacterStore()
+const {currentChar} = storeToRefs(characterStore)
+const fullChar = ref({})
 const charId = route.params.charId
 
 const fetchOneChar = async () => {
@@ -11,10 +15,11 @@ const fetchOneChar = async () => {
   const reponse = await fetch(charEndPoint);
   const datas   = await reponse.json();
   const {data,info} = datas
-  currentChar.value = data
+  fullChar.value = data
 }
 
 onBeforeMount(async()=>{
+	console.warn('Character stored in pinia >>> ',currentChar)
     await fetchOneChar()
 })
 
@@ -28,12 +33,12 @@ onBeforeMount(async()=>{
         <div class="film-container">
             <div class="film">
                 <div class="film-preview" >
-                    <img :src='currentChar.imageUrl' alt='char' />
+                    <img :src='fullChar.imageUrl' alt='char' />
                 </div>
                 <div class="film-info">
-                    <h2>{{currentChar.name}}</h2>
+                    <h2>{{fullChar.name}}</h2>
 					<ul>
-						<li v-for="film in currentChar.films" >{{film}}</li>
+						<li v-for="film in fullChar.films" >{{film}}</li>
 					</ul>
                 </div>
             </div>
